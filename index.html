@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Project</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #FAF3E0;
+            margin: 0;
+        }
+        .envelope {
+            width: 500px;
+            height: 300px;
+            background-color: #E74C3C;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.5s ease-in-out;
+        }
+        .envelope:hover {
+            transform: scale(1.05);
+        }
+        .text {
+            font-family: 'Arial', sans-serif;
+            font-size: 32px;
+            color: white;
+            font-style: italic;
+        }
+        .stamp {
+            width: 50px;
+            height: 50px;
+            background-color: #FDEBD0;
+            border: 2px solid #D7BDE2;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #E74C3C;
+        }
+        .hidden { display: none; }
+        .pop-out {
+            transform: scale(0);
+            opacity: 0;
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+        }
+        .show {
+            transform: scale(1);
+            opacity: 1;
+        }
+        .border-pink {
+            border: 4px solid #ffb6c1;
+            border-radius: 15px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="envelope" class="envelope" onclick="openEnvelope()">
+        <div class="text">For Chloe</div>
+        <div class="stamp">Fr. Luis</div>
+    </div>
+    
+    <div id="valentine-card" class="hidden pop-out text-center bg-white p-8 rounded-lg shadow-lg border-pink">
+        <img id="valentine-img" src="vphotos/hug-squeeze.gif" alt="Valentine's GIF" class="mx-auto mb-4 border-pink">
+        <h1 id="valentine-text" class="text-3xl font-bold mb-6">Chloe, will you be my Valentine?</h1>
+        <div class="space-x-4">
+            <button id="yes-btn" class="px-4 py-2 bg-red-500 text-white rounded">Yes</button>
+            <button id="no-btn" class="px-4 py-2 bg-gray-500 text-white rounded btn-no">No</button>
+        </div>
+        <div id="answer-section" class="mt-6 hidden">
+            <a id="answer-link" href="https://docs.google.com/forms/d/e/1FAIpQLSftDMaqkRCm4dIjP6cFB-Q5s4Tb1D3VQ4GLRuoF9N2VPwjNFw/viewform?usp=sharing" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded">Answer this!</a>
+        </div>
+    </div>
+
+    <script>
+        function openEnvelope() {
+            document.getElementById('envelope').classList.add('hidden');
+            const valentineCard = document.getElementById('valentine-card');
+            valentineCard.classList.remove('hidden');
+            setTimeout(() => valentineCard.classList.add('show'), 10);
+        }
+        document.getElementById('yes-btn').addEventListener('click', () => {
+            document.getElementById('valentine-img').src = 'vphotos/catCeleb.gif';
+            document.getElementById('valentine-text').textContent = 'YAY!';
+            confetti();
+            document.getElementById('yes-btn').style.display = 'none';
+            document.getElementById('no-btn').style.display = 'none';
+            document.getElementById('answer-section').classList.remove('hidden');
+        });
+        document.getElementById('no-btn').addEventListener('mouseover', () => {
+            const btn = document.getElementById('no-btn');
+            const card = document.getElementById('valentine-card');
+
+            const cardRect = card.getBoundingClientRect();
+            const btnWidth = btn.offsetWidth;
+            const btnHeight = btn.offsetHeight;
+
+            const minX = cardRect.left + 10;
+            const maxX = cardRect.right - btnWidth - 10;
+            const minY = cardRect.top + 10;
+            const maxY = cardRect.bottom - btnHeight - 10;
+
+            const x = Math.max(minX, Math.random() * (maxX - minX) + minX);
+            const y = Math.max(minY, Math.random() * (maxY - minY) + minY);
+
+            btn.style.position = 'absolute'; 
+            btn.style.left = `${x}px`;
+            btn.style.top = `${y}px`;
+        });
+    </script>
+</body>
+</html>
